@@ -1,0 +1,1801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOCOCO - MOdeling and COmputation CO-Design for Efficient Machine Learning</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-neon: #00ffff;
+            --secondary-neon: #ff00ff;
+            --accent-blue: #0099ff;
+            --dark-bg: #0a0a0f;
+            --card-bg: rgba(15, 15, 25, 0.8);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --gradient-main: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            --gradient-neon: linear-gradient(45deg, var(--primary-neon), var(--secondary-neon));
+        }
+
+        body {
+            font-family: 'Exo 2', sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--dark-bg);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 0, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(0, 153, 255, 0.1) 0%, transparent 50%);
+            z-index: -1;
+            animation: backgroundMove 20s ease-in-out infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translateX(0) translateY(0); }
+            25% { transform: translateX(-20px) translateY(-10px); }
+            50% { transform: translateX(20px) translateY(10px); }
+            75% { transform: translateX(-10px) translateY(20px); }
+        }
+
+        /* Floating particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--primary-neon);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) translateX(0px); opacity: 0.6; }
+            50% { transform: translateY(-20px) translateX(10px); opacity: 1; }
+        }
+
+        /* Right Side Navigation */
+        .right-nav {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            padding: 1.5rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            border-radius: 20px;
+            min-width: 220px;
+            box-shadow: 
+                0 8px 32px rgba(0, 255, 255, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .right-nav:hover {
+            border-color: rgba(0, 255, 255, 0.4);
+            box-shadow: 
+                0 12px 40px rgba(0, 255, 255, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-header {
+            color: var(--primary-neon);
+            font-family: 'Orbitron', monospace;
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 400;
+            font-size: 0.85rem;
+            padding: 0.75rem 1rem;
+            position: relative;
+            transition: all 0.3s ease;
+            display: block;
+            border-radius: 10px;
+            border-left: 2px solid transparent;
+            overflow: hidden;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-neon);
+            border-left-color: var(--primary-neon);
+            background: rgba(0, 255, 255, 0.05);
+            transform: translateX(5px);
+        }
+
+        .nav-links a:hover::before {
+            width: 100%;
+        }
+
+        .nav-links a.active {
+            color: var(--primary-neon);
+            background: rgba(0, 255, 255, 0.1);
+            border-left-color: var(--primary-neon);
+            font-weight: 600;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+
+        /* Mobile Menu Toggle */
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            right: 20px;
+            top: 20px;
+            z-index: 1001;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            padding: 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle:hover {
+            border-color: var(--primary-neon);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 25px;
+            height: 2px;
+            background: var(--primary-neon);
+            margin: 5px 0;
+            transition: 0.3s;
+            border-radius: 1px;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, 
+                rgba(10, 10, 15, 0.9) 0%, 
+                rgba(0, 51, 102, 0.8) 50%, 
+                rgba(15, 15, 25, 0.9) 100%);
+            color: white;
+            padding: 10rem 0 6rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                linear-gradient(45deg, transparent 30%, rgba(0, 255, 255, 0.05) 50%, transparent 70%),
+                linear-gradient(-45deg, transparent 30%, rgba(255, 0, 255, 0.05) 50%, transparent 70%);
+            animation: heroGlow 8s ease-in-out infinite;
+        }
+
+        @keyframes heroGlow {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .hero h1 {
+            font-family: 'Orbitron', monospace;
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            font-weight: 900;
+            background: var(--gradient-neon);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titleGlow 3s ease-in-out infinite;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        @keyframes titleGlow {
+            0%, 100% { filter: drop-shadow(0 0 20px rgba(0, 255, 255, 0.5)); }
+            50% { filter: drop-shadow(0 0 40px rgba(0, 255, 255, 0.8)); }
+        }
+
+        .hero h2 {
+            font-size: 1.3rem;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out 0.5s both;
+            color: var(--text-secondary);
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        .hero-info {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            margin: 4rem 0;
+            animation: fadeInUp 1s ease-out 0.8s both;
+        }
+
+        .hero-info-item {
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .hero-info-item:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-neon);
+            box-shadow: 0 20px 40px rgba(0, 255, 255, 0.2);
+        }
+
+        .hero-info-item i {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+            filter: drop-shadow(0 0 10px currentColor);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-right: auto;
+            margin-left: auto;
+            transition: margin-right 0.3s ease;
+        }
+
+        section {
+            padding: 5rem 0;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+
+        .section-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.8rem;
+            text-align: center;
+            margin-bottom: 4rem;
+            color: var(--primary-neon);
+            position: relative;
+            padding-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: var(--gradient-neon);
+            border-radius: 2px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+        }
+
+        /* Glass card styling */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .glass-card:hover::before {
+            left: 100%;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(0, 255, 255, 0.3);
+            transform: translateY(-5px);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.4),
+                0 0 30px rgba(0, 255, 255, 0.2);
+        }
+
+        .content-text {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            text-align: justify;
+        }
+
+        .highlight {
+            font-weight: 700;
+            background: var(--gradient-neon);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
+
+        .subsection {
+            font-weight: 700;
+            color: var(--primary-neon);
+            font-size: 1.1rem;
+            margin-right: 0.5rem;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .award-text {
+            font-style: italic;
+            font-weight: 600;
+            color: #ffd700;
+            background: rgba(255, 215, 0, 0.1);
+            padding: 8px 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            display: inline-block;
+            margin: 0.2rem 0;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .award-text::before {
+            content: '✨';
+            margin-right: 5px;
+        }
+
+        .award-text:hover {
+            background: rgba(255, 215, 0, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 215, 0, 0.3);
+        }
+
+        /* Grid layouts */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .grid-item {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            padding: 2.5rem;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .grid-item::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: var(--gradient-neon);
+            border-radius: 15px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .grid-item:hover::before {
+            opacity: 0.3;
+        }
+
+        .grid-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 255, 255, 0.2);
+        }
+
+        .grid-item h3 {
+            color: var(--primary-neon);
+            margin-bottom: 1rem;
+            font-family: 'Orbitron', monospace;
+            font-weight: 600;
+        }
+
+        .date {
+            font-size: 1.3rem;
+            color: var(--secondary-neon);
+            font-weight: 600;
+            font-family: 'Orbitron', monospace;
+        }
+
+        /* Speaker Biography Styles */
+
+        .speaker-bio-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: flex-start;
+            gap: 2rem;
+        }
+
+        .speaker-bio-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .speaker-bio-card:hover::before {
+            left: 100%;
+        }
+
+        .speaker-bio-card:hover {
+            border-color: rgba(255, 0, 255, 0.3);
+            transform: translateY(-5px);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.4),
+                0 0 30px rgba(255, 0, 255, 0.2);
+        }
+
+        .bio-avatar {
+            flex-shrink: 0;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: var(--gradient-neon);
+            padding: 3px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                0 0 25px rgba(255, 0, 255, 0.4),
+                0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .bio-avatar::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            background: var(--gradient-neon);
+            border-radius: 50%;
+            z-index: -1;
+            animation: rotate 4s linear infinite;
+        }
+
+        .bio-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: center;
+            transition: all 0.3s ease;
+        }
+
+        .bio-content {
+            flex: 1;
+        }
+
+        .bio-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .bio-name {
+            font-size: 1.6rem;
+            color: var(--primary-neon);
+            margin-bottom: 0.5rem;
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+        }
+
+        .bio-role {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+            font-weight: 500;
+        }
+
+        .bio-institution {
+            color: var(--secondary-neon);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .bio-text {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            text-align: justify;
+        }
+
+        /* Program Committee Styles */
+        .committee-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .committee-member {
+            background: rgba(0, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .committee-member::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .committee-member:hover::before {
+            left: 100%;
+        }
+
+        .committee-member:hover {
+            border-color: var(--primary-neon);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0, 255, 255, 0.2);
+        }
+
+        .member-name {
+            display: block;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-neon);
+            margin-bottom: 0.5rem;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .member-affiliation {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            opacity: 0.8;
+        }
+
+        /* Topic List Styles */
+        .topic-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.8rem;
+        }
+
+        .topic-item {
+            background: rgba(0, 255, 255, 0.03);
+            border: 1px solid rgba(0, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 1.8rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .topic-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.08), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .topic-item:hover::before {
+            left: 100%;
+        }
+
+        .topic-item:hover {
+            border-color: rgba(0, 255, 255, 0.3);
+            transform: translateX(5px);
+            box-shadow: 0 8px 25px rgba(0, 255, 255, 0.15);
+        }
+
+        .topic-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-neon);
+            margin-bottom: 0.8rem;
+            line-height: 1.4;
+            font-family: 'Exo 2', sans-serif;
+        }
+
+        .topic-description {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            font-style: italic;
+            opacity: 0.9;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        /* Link styles */
+        .content-text a {
+            color: var(--primary-neon);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .content-text a:hover {
+            border-bottom-color: var(--primary-neon);
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        /* Clickable Card Styles */
+        .clickable-card {
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+        }
+
+        .clickable-card:hover {
+            border-color: rgba(0, 255, 255, 0.4) !important;
+            transform: translateY(-8px) !important;
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.4),
+                0 0 40px rgba(0, 255, 255, 0.3) !important;
+        }
+
+        .clickable-card::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: var(--gradient-neon);
+            border-radius: 22px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .clickable-card:hover::after {
+            opacity: 0.2;
+        }
+
+        .click-indicator {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 8px 15px;
+            font-size: 0.8rem;
+            color: var(--primary-neon);
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', monospace;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+        }
+
+        .clickable-card:hover .click-indicator {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .click-indicator span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Touch device optimizations */
+        @media (hover: none) and (pointer: coarse) {
+            .click-indicator {
+                opacity: 1;
+                position: static;
+                margin-top: 1rem;
+                text-align: center;
+                transform: none;
+            }
+            
+            .clickable-card:active {
+                transform: translateY(-5px) scale(0.98) !important;
+            }
+        }
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: flex-start;
+            gap: 2rem;
+        }
+
+        .speaker-bio-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .speaker-bio-card:hover::before {
+            left: 100%;
+        }
+
+        .speaker-bio-card:hover {
+            border-color: rgba(255, 0, 255, 0.3);
+            transform: translateY(-5px);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.4),
+                0 0 30px rgba(255, 0, 255, 0.2);
+        }
+
+        .bio-avatar {
+            flex-shrink: 0;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: var(--gradient-neon);
+            padding: 3px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                0 0 25px rgba(255, 0, 255, 0.4),
+                0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .bio-avatar::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            background: var(--gradient-neon);
+            border-radius: 50%;
+            z-index: -1;
+            animation: rotate 4s linear infinite;
+        }
+
+        .bio-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: center;
+            transition: all 0.3s ease;
+        }
+
+        .bio-content {
+            flex: 1;
+        }
+
+        .bio-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .bio-name {
+            font-size: 1.6rem;
+            color: var(--primary-neon);
+            margin-bottom: 0.5rem;
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+        }
+
+        .bio-role {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+            font-weight: 500;
+        }
+
+        .bio-institution {
+            color: var(--secondary-neon);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .bio-text {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            text-align: justify;
+        }
+
+        /* Schedule table */
+        .schedule-table {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .schedule-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .schedule-table th {
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.2), rgba(255, 0, 255, 0.2));
+            color: var(--text-primary);
+            padding: 1.5rem;
+            text-align: left;
+            font-family: 'Orbitron', monospace;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .schedule-table td {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+            color: var(--text-secondary);
+        }
+
+        .schedule-table tr:hover {
+            background: rgba(0, 255, 255, 0.05);
+        }
+
+        .schedule-table .break-row {
+            background: rgba(255, 0, 255, 0.05);
+        }
+
+        .schedule-table .break-row:hover {
+            background: rgba(255, 0, 255, 0.1);
+        }
+
+        .time-slot {
+            font-weight: 600;
+            color: var(--primary-neon);
+            white-space: nowrap;
+            font-family: 'Orbitron', monospace;
+        }
+
+        /* Button styles */
+        .btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            color: var(--primary-neon);
+            text-decoration: none;
+            border-radius: 50px;
+            border: 2px solid var(--primary-neon);
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-family: 'Orbitron', monospace;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-neon);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .btn:hover::before {
+            left: 0;
+        }
+
+        .btn:hover {
+            color: var(--dark-bg);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0, 255, 255, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark-bg);
+            border-top: 1px solid rgba(0, 255, 255, 0.2);
+            color: var(--text-secondary);
+            text-align: center;
+            padding: 4rem 0;
+            margin-top: 5rem;
+            position: relative;
+        }
+
+        .footer-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .social-links {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .social-links a {
+            color: var(--primary-neon);
+            font-size: 2rem;
+            transition: all 0.3s ease;
+            padding: 1rem;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .social-links a:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 10px 25px rgba(0, 255, 255, 0.4);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main-content {
+                margin-right: 0;
+            }
+            
+            .right-nav {
+                transform: translateX(100%) translateY(-50%);
+                top: 50%;
+                right: 0;
+                height: 100vh;
+                border-radius: 0;
+                padding: 3rem 2rem;
+                min-width: 280px;
+                transition: transform 0.3s ease;
+            }
+            
+            .right-nav.active {
+                transform: translateX(0) translateY(-50%);
+            }
+            
+            .menu-toggle {
+                display: block;
+            }
+
+            .speaker-bio-card {
+                flex-direction: column;
+                text-align: center;
+                padding: 2rem;
+            }
+
+            .bio-avatar {
+                align-self: center;
+                width: 100px;
+                height: 100px;
+            }
+
+            .committee-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 1.2rem;
+            }
+
+            .topic-item {
+                padding: 1.6rem;
+            }
+
+            .topic-title {
+                font-size: 1.05rem;
+            }
+
+            .click-indicator {
+                font-size: 0.75rem;
+                padding: 6px 12px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero h2 {
+                font-size: 1.1rem;
+            }
+            
+            .hero-info {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .speaker-bio-card {
+                padding: 2rem;
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .bio-avatar {
+                width: 100px;
+                height: 100px;
+            }
+
+            .bio-name {
+                font-size: 1.4rem;
+            }
+
+            .bio-text {
+                font-size: 0.95rem;
+            }
+
+            .committee-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .committee-member {
+                padding: 1.2rem;
+            }
+
+            .member-name {
+                font-size: 1rem;
+            }
+
+            .topic-item {
+                padding: 1.4rem;
+            }
+
+            .topic-title {
+                font-size: 1rem;
+                margin-bottom: 0.6rem;
+            }
+
+            .topic-description {
+                font-size: 0.9rem;
+            }
+
+            .click-indicator {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin-top: 1rem;
+                opacity: 1;
+                transform: none;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Right Side Navigation -->
+    <nav class="right-nav" id="rightNav">
+        <div class="nav-header">Navigation</div>
+        <ul class="nav-links">
+            <li><a href="#about" class="nav-link">Workshop Summary</a></li>
+            <li><a href="#speakers" class="nav-link">Keynote Speakers</a></li>
+            <li><a href="#schedule" class="nav-link">Schedule</a></li>
+            <li><a href="#organizers" class="nav-link">Organizers</a></li>
+            <li><a href="#submission" class="nav-link">Call for Papers</a></li>
+            <li><a href="#scope" class="nav-link">Scope</a></li>
+            <li><a href="#committee" class="nav-link">Program Committee</a></li>
+            <li><a href="#contact" class="nav-link">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Mobile Menu Toggle -->
+    <button class="menu-toggle" id="menuToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>MOCOCO</h1>
+                <h2>MOdeling and COmputation CO-Design for Efficient Machine Learning</h2>
+                <div class="hero-info">
+                    <div class="hero-info-item">
+                        <i>📅</i>
+                        <strong>December, 2025</strong>
+                    </div>
+                    <div class="hero-info-item">
+                        <i>📍</i>
+                        <strong>NeurIPS 2025</strong>
+                    </div>
+                    <div class="hero-info-item">
+                        <i>🌐</i>
+                        <strong>International Workshop</strong>
+                    </div>
+                </div>
+                <div style="margin-top: 3rem;">
+                    <a href="#submission" class="btn">Submit Your Paper</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="fade-in">
+            <h2 class="section-title">Workshop Summary</h2>
+            <div class="glass-card">
+                <p class="content-text">
+                    Current machine learning (ML) increasingly depends on scaling up data, model size, and compute resources to reach state-of-the-art performance. While this strategy has driven remarkable progress, it also raises critical challenges: longer runtimes, higher memory and energy demands, inefficient hardware utilization, and limited deployment scalability. The current <span class="highlight">scaling-centric</span> approach often neglects the cumulative costs across the computational stack, threatening ML's sustainability and accessibility.
+                </p>
+                <p class="content-text">
+                    <span class="highlight">MOCOCO</span> (<span class="highlight">MO</span>deling and <span class="highlight">CO</span>mputation <span class="highlight">CO</span>-Design for Efficient Machine Learning) offers a venue to rethink ML through the joint design of modeling and computation. It promotes efficiency-driven co-design across model architecture, learning algorithms, software, and hardware. From general to domain-specific ML in science and healthcare, MOCOCO welcomes work that aligns efficiency objectives across all layers of the ML pipeline.
+                </p>
+                <p class="content-text">
+                    <span class="subsection">Activities.</span> The workshop will include keynotes, a panel discussion, oral presentations, and poster sessions. We invite high-quality original papers of up to 4 pages. All accepted papers will be presented as posters, with a subset selected for oral presentations. Two outstanding papers and two outstanding student papers will be recognized by the program committee. <span class="award-text">Our confirmed sponsor, Lambda, will award $1,500 in GPU credits to each outstanding paper team</span>
+                </p>
+                <p class="content-text">
+                    <span class="subsection">Attendance Estimate.</span> We expect between 80 and 100 paper submissions and around 200 attendees.
+                </p>
+            </div>
+        </section>
+
+        <!-- Speakers Section -->
+        <section id="speakers" class="fade-in">
+            <h2 class="section-title">Keynote Speakers</h2>
+            
+            <div class="speaker-bio-card clickable-card" data-url="https://ai.meta.com/people/301718759371133/leon-bottou/">
+                <div class="bio-avatar">
+                    <img src="images/bottou.jpg" alt="Leon Bottou">
+                </div>
+                <div class="bio-content">
+                    <div class="bio-header">
+                        <h4 class="bio-name">Leon Bottou</h4>
+                        <p class="bio-role">Research Scientist</p>
+                        <p class="bio-institution">Meta AI Research</p>
+                    </div>
+                    <p class="bio-text">
+                        Leon Bottou is a renowned researcher in machine learning, optimization, and AI systems, currently a Research Scientist at Meta AI. Bottou is best known for his pioneering work on stochastic gradient descent (SGD), large-scale learning algorithms, and practical AI systems. His influential contributions span from the development of the DjVu document compression technology to the widely used LeNet convolutional network architecture. Bottou has also made foundational contributions to online learning, kernel methods, and scalable ML systems. His work has been widely recognized across both academia and industry, making him a leader for NeurIPS discussions on the future of scalable and sustainable ML from modeling to practical deployment.
+                    </p>
+                </div>
+                <div class="click-indicator">
+                    <span>🔗 Click to visit profile</span>
+                </div>
+            </div>
+
+            <div class="speaker-bio-card clickable-card" data-url="https://www.cs.cmu.edu/~zhihaoj2/">
+                <div class="bio-avatar">
+                    <img src="images/zhihao.jpg" alt="Zhihao Jia">
+                </div>
+                <div class="bio-content">
+                    <div class="bio-header">
+                        <h4 class="bio-name">Zhihao Jia</h4>
+                        <p class="bio-role">Assistant Professor</p>
+                        <p class="bio-institution">Carnegie Mellon University</p>
+                    </div>
+                    <p class="bio-text">
+                        Zhihao Jia is an assistant professor in the Computer Science Department at Carnegie Mellon University. His research interests lie in the intersection of computer systems and machine learning, with a focus on building efficient, scalable, and performant systems for ML applications. Prof. Jia received his PhD and MS from Stanford University where he also got the Arthur Samuel Best Doctoral Thesis Award. He is the recipient of the Sloan Research Fellow, NSF CAREER award and research awards from Amazon, Cisco, Google, Meta, Oracle, Qualcomm, and Samsung.
+                    </p>
+                </div>
+                <div class="click-indicator">
+                    <span>🔗 Click to visit profile</span>
+                </div>
+            </div>
+
+            <div class="speaker-bio-card clickable-card" data-url="https://scholar.google.com/citations?user=7k_1QFIAAAAJ&hl=zh-CN">
+                <div class="bio-avatar">
+                    <img src="images/yingnian_wu.jpg" alt="Ying Nian Wu">
+                </div>
+                <div class="bio-content">
+                    <div class="bio-header">
+                        <h4 class="bio-name">Ying Nian Wu</h4>
+                        <p class="bio-role">Professor</p>
+                        <p class="bio-institution">University of California, Los Angeles</p>
+                    </div>
+                    <p class="bio-text">
+                        Ying Nian Wu is a professor in the Department of Statistics at University of California, Los Angeles (UCLA). He received his Ph.D. in statistics from Harvard University in 1996. Before joining UCLA, he was an assistant professor in the Department of Statistics, University of Michigan from 1997 to 1999. His research interests include generative modeling, representation learning, and computer vision. He received Honorable Mention for the David Marr Prize in 1999 and 2007 for generative modeling in computer vision.
+                    </p>
+                </div>
+                <div class="click-indicator">
+                    <span>🔗 Click to visit profile</span>
+                </div>
+            </div>
+
+            <div class="speaker-bio-card clickable-card" data-url="https://sbmi.uth.edu/faculty-and-staff/jim-zheng.htm">
+                <div class="bio-avatar">
+                    <img src="images/wenjinzheng.jpg" alt="W. Jim Zheng">
+                </div>
+                <div class="bio-content">
+                    <div class="bio-header">
+                        <h4 class="bio-name">W. Jim Zheng</h4>
+                        <p class="bio-role">Professor</p>
+                        <p class="bio-institution">UTHealth Houston</p>
+                    </div>
+                    <p class="bio-text">
+                        W. Jim Zheng is a professor at the McWilliams School of Biomedical Informatics at UTHealth Houston. His research bridges efficient machine learning and biomedical informatics, with a focus on scalable knowledge representation, high-throughput genomic data mining, and AI-driven translational medicine. He pioneered Genome3D for 3D genome visualization and developed Ontology Fingerprints, an early embedding framework for biomedical knowledge. His group also advanced efficient deep learning approaches for drug combination prediction and alternative splicing analysis with AlphaFold. Dr. Zheng will introduce the significant scalability challenges in the core computation tasks of NIH BRAIN Initiative and bring a strong scientific rationale for this workshop.
+                    </p>
+                </div>
+                <div class="click-indicator">
+                    <span>🔗 Click to visit profile</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Schedule Section -->
+        <section id="schedule" class="fade-in">
+            <h2 class="section-title">Workshop Schedule</h2>
+            <div class="schedule-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Event</th>
+                            <th>Speaker/Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="time-slot">8:30 - 9:00</td>
+                            <td><strong>Welcome Remarks</strong></td>
+                            <td>Zhaozhuo Xu and Jianwen Xie</td>
+                        </tr>
+                        <tr>
+                            <td class="time-slot">9:00 - 9:30</td>
+                            <td><strong>Invited Talk</strong></td>
+                            <td>Leon Bottou</td>
+                        </tr>
+                        <tr>
+                            <td class="time-slot">9:30 - 10:00</td>
+                            <td><strong>Invited Talk</strong></td>
+                            <td>TBD</td>
+                        </tr>
+                        <tr class="break-row">
+                            <td class="time-slot">10:00 - 10:15</td>
+                            <td><strong>☕ Coffee Break</strong></td>
+                            <td>Networking Opportunity</td>
+                        </tr>
+                        <tr>
+                            <td class="time-slot">10:15 - 10:45</td>
+                            <td><strong>Contributed Talks</strong></td>
+                            <td>Workshop Oral Papers 1</td>
+                        </tr>
+                        <tr>
+                            <td class="time-slot">10:45 - 11:45</td>
+                            <td><strong>Morning Poster Session</strong></td>
+                            <td>All Accepted Posters</td>
+                        </tr>
+                        <tr class="break-row">
+                            <td class="time-slot">11:45 - 13:00</td>
+                            <td><strong>🍽️ Lunch Break</strong></td>
+                            <td>Networking Lunch</td>
+                        </tr>
+                        <tr>
+                            <td class="time-slot">13:00 - 13:30</td>
+                            <td><strong>Invited Talk</strong></td>
+                            <td>TBD</td>
+                        </tr>
+                        <tr>
+                            <td class="time-slot">13:30 - 14:00</td>
+                            <td><strong>Invited Talk</strong></td>
+                            <td>TBD</td>
+                        </tr>
+                        <tr>
+                            <td class="time-slot">14:00 - 15:00</td>
+                            <td><strong>Contributed Talks</strong></td>
+                            <td>Workshop Oral Papers 2</td>
+                        </tr>
+                        <tr class="break-row">
+                            <td class="time-slot">15:00 - 15:15</td>
+                            <td><strong>☕ Coffee Break</strong></td>
+                            <td>Networking Opportunity</td>
+                        </tr>
+                        <tr>
+                            <td class="time-slot">15:15 - 15:45</td>
+                            <td><strong>Industry Demo</strong></td>
+                            <td>Lambda</td>
+                        </tr>
+                        <tr>
+                            <td class="time-slot">15:45 - 16:15</td>
+                            <td><strong>Panel Discussion</strong></td>
+                            <td>Hosted by Beidi Chen</td>
+                        </tr>
+                        <tr>
+                            <td class="time-slot">16:15 - 16:45</td>
+                            <td><strong>Afternoon Poster Session</strong></td>
+                            <td>All Accepted Posters</td>
+                        </tr>
+                        <tr>
+                            <td class="time-slot">16:45 - 17:00</td>
+                            <td><strong>Closing Remarks</strong></td>
+                            <td>Workshop Organizers</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Organizers Section -->
+        <section id="organizers" class="fade-in">
+            <h2 class="section-title">Workshop Organizers</h2>
+            
+            <div class="speaker-bio-card clickable-card" data-url="https://scholar.google.com/citations?hl=en&user=7tDlVAsAAAAJ&view_op=list_works&sortby=pubdate">
+                <div class="bio-avatar">
+                    <img src="images/zhaozhuo.jpg" alt="Zhaozhuo Xu">
+                </div>
+                <div class="bio-content">
+                    <div class="bio-header">
+                        <h4 class="bio-name">Zhaozhuo Xu</h4>
+                        <p class="bio-role">Assistant Professor</p>
+                        <p class="bio-institution">Stevens Institute of Technology</p>
+                    </div>
+                    <p class="bio-text">
+                        Zhaozhuo Xu is an Assistant Professor in the Department of Computer Science at Stevens Institute of Technology. His research focuses on advancing scalable and sustainable AI, particularly developing randomized algorithms to improve the efficiency of AI systems on commodity hardware for practical applications. Dr. Xu's work has been featured in leading academic venues, including NeurIPS, ICML, ICLR, KDD, ACL, and EMNLP. His innovations in scalable AI have been integrated into widely used libraries such as Huggingface and adopted by several startups. He also serves as an area chair for major conferences, including NeurIPS, ICML, ICLR, ACL, EMNLP Main/Demo Track, and COLING. He received the AAAI New Faculty Highlights in 2025.
+                    </p>
+                </div>
+                <div class="click-indicator">
+                    <span>🔗 Click to visit profile</span>
+                </div>
+            </div>
+
+            <div class="speaker-bio-card clickable-card" data-url="http://www.stat.ucla.edu/~jxie/">
+                <div class="bio-avatar">
+                    <img src="images/jianwen.jpg" alt="Jianwen Xie">
+                </div>
+                <div class="bio-content">
+                    <div class="bio-header">
+                        <h4 class="bio-name">Jianwen Xie</h4>
+                        <p class="bio-role">Research Scientist</p>
+                        <p class="bio-institution">Lambda, Inc</p>
+                    </div>
+                    <p class="bio-text">
+                        Jianwen Xie is a Research Scientist at Lambda, Inc, with a focus on generative modeling, vision language models, AI for Science, and embodied AI. He received his Ph.D. from the University of California, Los Angeles (UCLA). Dr. Xie serves as a Senior Area Chair for NeurIPS, and Area Chair for ICML, ICLR, CVPR, ECCV and WACV. He is currently an Associate Editor of IEEE Transactions on Neural Networks and Learning Systems (TNNLS), IEEE Transactions on Image Processing (TIP), Pattern Recognition (PR), Computer Vision and Image Understanding (CVIU), and Journal of Artificial Intelligence Research (JAIR). He co-organized tutorials at CVPR, ICCV, ECCV, and IJCAI.
+                    </p>
+                </div>
+                <div class="click-indicator">
+                    <span>🔗 Click to visit profile</span>
+                </div>
+            </div>
+
+            <div class="speaker-bio-card clickable-card" data-url="https://www.andrew.cmu.edu/user/beidic/">
+                <div class="bio-avatar">
+                    <img src="images/beidi_chen_pic.jpg" alt="Beidi Chen">
+                </div>
+                <div class="bio-content">
+                    <div class="bio-header">
+                        <h4 class="bio-name">Beidi Chen</h4>
+                        <p class="bio-role">Assistant Professor</p>
+                        <p class="bio-institution">Carnegie Mellon University</p>
+                    </div>
+                    <p class="bio-text">
+                        Beidi Chen is an Assistant Professor at Carnegie Mellon University and a Research Scientist at FAIR. Before that, she was a postdoctoral scholar at Stanford University. She received her Ph.D. from Rice University. Her research focuses on efficient deep learning; specifically, she designs and optimizes randomized algorithms on current hardware to accelerate large machine learning systems. Her work has won best paper runner-up at ICML 2022 and she was selected as a Rising Star in EECS by MIT and UIUC. She was a workshop chair for MLSys 2023 and 2024, and she co-organized many workshops at ICML and NeurIPS.
+                    </p>
+                </div>
+                <div class="click-indicator">
+                    <span>🔗 Click to visit profile</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Submission Section -->
+        <section id="submission" class="fade-in">
+            <h2 class="section-title">Call for Papers</h2>
+            <div class="glass-card">
+                <h3 style="color: var(--primary-neon); margin-bottom: 1rem; font-family: 'Orbitron', monospace;">Submission Guidelines</h3>
+                <p class="content-text">
+                    We invite researchers and practitioners to submit their original work on modeling and computation co-design for efficient machine learning. Please refer to the <a href="#scope" style="color: var(--primary-neon); text-decoration: none;">Workshop Scope</a> section for detailed topics of interest.
+                </p>
+                <p class="content-text">
+                    <span class="subsection">Paper Format:</span> Papers should be formatted according to the NeurIPS 2025 style guidelines and should not exceed 4 pages (excluding references and appendices).
+                </p>
+                <p class="content-text">
+                    <span class="subsection">Submission Deadline:</span> September 30, 2025, Anywhere on Earth (AoE)
+                </p>
+                <p class="content-text">
+                    <span class="subsection">Awards:</span> Two outstanding papers and two outstanding student papers will be recognized by the program committee. Our confirmed sponsor, Lambda, will award $1,500 in GPU credits to each outstanding paper team. To promote diversity and inclusion, we have secured sponsorship from Lambda to offer support, including GPU cloud credits for outstanding papers.
+                </p>
+                <div style="text-align: center; margin-top: 3rem;">
+                    <a href="#" class="btn">Submit Your Paper</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Scope Section -->
+        <section id="scope" class="fade-in">
+            <h2 class="section-title">Workshop Scope</h2>
+            <div class="glass-card">
+                <h3 style="color: var(--primary-neon); margin-bottom: 2rem; font-family: 'Orbitron', monospace; font-size: 1.3rem;">Paper Topics</h3>
+                <p class="content-text" style="margin-bottom: 2rem;">
+                    We welcome papers with topics as follows:
+                </p>
+                
+                <div class="topic-list">
+                    <div class="topic-item">
+                        <h4 class="topic-title">1. Data-efficient modeling beyond auto-regressive modeling</h4>
+                        <p class="topic-description">(e.g., discrete diffusion models and latent thought vectors for language modeling)</p>
+                    </div>
+                    
+                    <div class="topic-item">
+                        <h4 class="topic-title">2. Unified efficient modeling across multi-modalities, including text, vision, audio and genes</h4>
+                        <p class="topic-description">(e.g., unified tokenizer for vision and language)</p>
+                    </div>
+                    
+                    <div class="topic-item">
+                        <h4 class="topic-title">3. Efficient model architecture beyond Transformers</h4>
+                        <p class="topic-description">(e.g., state-space models, convolution-based models, hybrid models)</p>
+                    </div>
+                    
+                    <div class="topic-item">
+                        <h4 class="topic-title">4. Hardware-aware ML algorithms beyond giant matrix multiplication for efficient training and inference</h4>
+                        <p class="topic-description">(e.g., sparsity-driven computing, low-rank algorithms, tensor decomposition)</p>
+                    </div>
+                    
+                    <div class="topic-item">
+                        <h4 class="topic-title">5. Benchmarks to evaluate accuracy-efficiency trade-offs of ML systems</h4>
+                        <p class="topic-description">(e.g., benchmark efficiency in LLM reasoning, long-context understanding)</p>
+                    </div>
+                    
+                    <div class="topic-item">
+                        <h4 class="topic-title">6. Co-design of modeling, algorithm, system and hardware for efficient ML</h4>
+                        <p class="topic-description">(e.g., sparse ML systems with customized hardware such as FPGA)</p>
+                    </div>
+                    
+                    <div class="topic-item">
+                        <h4 class="topic-title">7. Efficient ML for driving accelerated scientific discovery</h4>
+                        <p class="topic-description">(e.g., accelerated material design, gene pathway discovery)</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Program Committee Section -->
+        <section id="committee" class="fade-in">
+            <h2 class="section-title">Program Committee</h2>
+            <div class="glass-card">
+                <h3 style="color: var(--primary-neon); margin-bottom: 2rem; font-family: 'Orbitron', monospace; text-align: center; font-size: 1.3rem;">Reviewers (Invited, in Alphabetical Order)</h3>
+                <div class="committee-grid">
+                    <div class="committee-member">
+                        <span class="member-name">Aditya Desai</span>
+                        <span class="member-affiliation">(University of California, Berkeley)</span>
+                    </div>
+                    <div class="committee-member">
+                        <span class="member-name">Alay Shah</span>
+                        <span class="member-affiliation">(Together AI)</span>
+                    </div>
+                    <div class="committee-member">
+                        <span class="member-name">Benjamin Coleman</span>
+                        <span class="member-affiliation">(Google LLC)</span>
+                    </div>
+                    <div class="committee-member">
+                        <span class="member-name">Chuang Zhou</span>
+                        <span class="member-affiliation">(The Hong Kong Polytechnic University)</span>
+                    </div>
+                    <div class="committee-member">
+                        <span class="member-name">Henry Zhong</span>
+                        <span class="member-affiliation">(Rice University)</span>
+                    </div>
+                    <div class="committee-member">
+                        <span class="member-name">Meilong Xu</span>
+                        <span class="member-affiliation">(Stony Brook University)</span>
+                    </div>
+                    <div class="committee-member">
+                        <span class="member-name">Ranajoy Sadhukhan</span>
+                        <span class="member-affiliation">(Carnegie Mellon University)</span>
+                    </div>
+                    <div class="committee-member">
+                        <span class="member-name">Tianfu Fu</span>
+                        <span class="member-affiliation">(OpenAI, Inc)</span>
+                    </div>
+                    <div class="committee-member">
+                        <span class="member-name">Wentao Guo</span>
+                        <span class="member-affiliation">(Princeton University)</span>
+                    </div>
+                    <div class="committee-member">
+                        <span class="member-name">Wenya Xie</span>
+                        <span class="member-affiliation">(University of Minnesota)</span>
+                    </div>
+                    <div class="committee-member">
+                        <span class="member-name">Yanzhou Pan</span>
+                        <span class="member-affiliation">(Google LLC)</span>
+                    </div>
+                    <div class="committee-member">
+                        <span class="member-name">Yide Ran</span>
+                        <span class="member-affiliation">(Stevens Institute of Technology)</span>
+                    </div>
+                    <div class="committee-member">
+                        <span class="member-name">Yimeng Zeng</span>
+                        <span class="member-affiliation">(University of Pennsylvania)</span>
+                    </div>
+                    <div class="committee-member">
+                        <span class="member-name">Yuheng Wu</span>
+                        <span class="member-affiliation">(Stanford University)</span>
+                    </div>
+                    <div class="committee-member">
+                        <span class="member-name">Zhuoming Chen</span>
+                        <span class="member-affiliation">(Carnegie Mellon University)</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="fade-in">
+            <h2 class="section-title">Contact</h2>
+            <div class="glass-card" style="text-align: center;">
+                <p style="font-size: 1.2rem; margin-bottom: 2rem; color: var(--text-secondary);">
+                    For any questions or inquiries about the workshop, please contact the organizers at:
+                </p>
+                <p style="font-size: 1.5rem; color: var(--primary-neon); font-weight: 600; font-family: 'Orbitron', monospace;">
+                    mococo2025@neurips.cc
+                </p>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <div class="footer-content">
+                <p>© 2025 MOCOCO Workshop. All rights reserved.</p>
+                <div class="social-links">
+                    <a href="#">📧</a>
+                    <a href="#">🐦</a>
+                    <a href="#">💼</a>
+                    <a href="#">📘</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (3 + Math.random() * 6) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const rightNav = document.getElementById('rightNav');
+        
+        menuToggle.addEventListener('click', function() {
+            rightNav.classList.toggle('active');
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('.nav-link').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    rightNav.classList.remove('active');
+                }
+            });
+        });
+
+        // Active link highlighting
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        function updateActiveLink() {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (window.pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').slice(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // Scroll animations
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('section').forEach(section => {
+            if (!section.classList.contains('hero')) {
+                observer.observe(section);
+            }
+        });
+
+        window.addEventListener('scroll', updateActiveLink);
+        window.addEventListener('load', function() {
+            createParticles();
+            updateActiveLink();
+        });
+
+        // Add glitch effect to title on hover
+        const heroTitle = document.querySelector('.hero h1');
+        heroTitle.addEventListener('mouseenter', function() {
+            this.style.animation = 'none';
+            setTimeout(() => {
+                this.style.animation = 'titleGlow 3s ease-in-out infinite';
+            }, 100);
+        });
+
+        // Clickable cards functionality
+        document.querySelectorAll('.clickable-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const url = this.getAttribute('data-url');
+                if (url) {
+                    window.open(url, '_blank');
+                }
+            });
+
+            // Add visual feedback on click
+            card.addEventListener('mousedown', function() {
+                this.style.transform = 'translateY(-5px) scale(0.98)';
+            });
+
+            card.addEventListener('mouseup', function() {
+                this.style.transform = 'translateY(-8px) scale(1)';
+            });
+
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = '';
+            });
+        });
+    </script>
+</body>
+</html>
