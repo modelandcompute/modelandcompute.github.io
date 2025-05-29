@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MOCOCO - MOdeling and COmputation CO-Design for Efficient Machine Learning</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -13,74 +13,26 @@
         }
 
         :root {
-            --primary-neon: #00ffff;
-            --secondary-neon: #ff00ff;
-            --accent-blue: #0099ff;
-            --dark-bg: #0a0a0f;
-            --card-bg: rgba(15, 15, 25, 0.8);
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --text-primary: #ffffff;
-            --text-secondary: #b0b0b0;
-            --gradient-main: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-            --gradient-neon: linear-gradient(45deg, var(--primary-neon), var(--secondary-neon));
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #2980b9;
+            --dark-bg: #1a202c;
+            --light-bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --border-color: #e0e0e0;
+            --link-color: #3498db;
+            --header-color: #2c3e50;
         }
 
         body {
-            font-family: 'Exo 2', sans-serif;
+            font-family: 'Source Sans Pro', sans-serif;
             line-height: 1.6;
             color: var(--text-primary);
-            background: var(--dark-bg);
+            background: var(--light-bg);
             overflow-x: hidden;
             position: relative;
-        }
-
-        /* Animated background */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 20% 50%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 0, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 40% 80%, rgba(0, 153, 255, 0.1) 0%, transparent 50%);
-            z-index: -1;
-            animation: backgroundMove 20s ease-in-out infinite;
-        }
-
-        @keyframes backgroundMove {
-            0%, 100% { transform: translateX(0) translateY(0); }
-            25% { transform: translateX(-20px) translateY(-10px); }
-            50% { transform: translateX(20px) translateY(10px); }
-            75% { transform: translateX(-10px) translateY(20px); }
-        }
-
-        /* Floating particles */
-        .particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        .particle {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: var(--primary-neon);
-            border-radius: 50%;
-            animation: float 6s ease-in-out infinite;
-            opacity: 0.6;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) translateX(0px); opacity: 0.6; }
-            50% { transform: translateY(-20px) translateX(10px); opacity: 1; }
         }
 
         /* Right Side Navigation */
@@ -91,85 +43,54 @@
             transform: translateY(-50%);
             z-index: 1000;
             padding: 1.5rem;
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(0, 255, 255, 0.2);
-            border-radius: 20px;
-            min-width: 220px;
-            box-shadow: 
-                0 8px 32px rgba(0, 255, 255, 0.1),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .right-nav:hover {
-            border-color: rgba(0, 255, 255, 0.4);
-            box-shadow: 
-                0 12px 40px rgba(0, 255, 255, 0.2),
-                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            background: var(--dark-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            min-width: 200px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
         }
 
         .nav-header {
-            color: var(--primary-neon);
-            font-family: 'Orbitron', monospace;
-            font-size: 0.9rem;
-            font-weight: 700;
+            color: white;
+            font-family: 'Roboto Slab', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
             margin-bottom: 1.5rem;
             padding-bottom: 0.5rem;
-            border-bottom: 1px solid rgba(0, 255, 255, 0.3);
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            letter-spacing: 0.5px;
         }
 
         .nav-links {
             list-style: none;
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
+            gap: 0.6rem;
         }
 
         .nav-links a {
-            color: var(--text-secondary);
+            color: rgba(255, 255, 255, 0.8);
             text-decoration: none;
             font-weight: 400;
-            font-size: 0.85rem;
-            padding: 0.75rem 1rem;
-            position: relative;
-            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            padding: 0.5rem 0.75rem;
+            border-radius: 3px;
+            transition: all 0.2s ease;
             display: block;
-            border-radius: 10px;
             border-left: 2px solid transparent;
-            overflow: hidden;
-        }
-
-        .nav-links a::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 0%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.1), transparent);
-            transition: width 0.3s ease;
         }
 
         .nav-links a:hover {
-            color: var(--primary-neon);
-            border-left-color: var(--primary-neon);
-            background: rgba(0, 255, 255, 0.05);
-            transform: translateX(5px);
-        }
-
-        .nav-links a:hover::before {
-            width: 100%;
+            color: white;
+            border-left-color: var(--secondary);
+            background: rgba(255, 255, 255, 0.07);
         }
 
         .nav-links a.active {
-            color: var(--primary-neon);
-            background: rgba(0, 255, 255, 0.1);
-            border-left-color: var(--primary-neon);
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            border-left-color: var(--secondary);
             font-weight: 600;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
         }
 
         /* Mobile Menu Toggle */
@@ -179,156 +100,99 @@
             right: 20px;
             top: 20px;
             z-index: 1001;
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(0, 255, 255, 0.3);
-            padding: 12px;
-            border-radius: 12px;
+            background: var(--dark-bg);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 10px;
+            border-radius: 3px;
             cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .menu-toggle:hover {
-            border-color: var(--primary-neon);
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
-        }
-
-        .menu-toggle span {
-            display: block;
-            width: 25px;
-            height: 2px;
-            background: var(--primary-neon);
-            margin: 5px 0;
-            transition: 0.3s;
-            border-radius: 1px;
+            color: white;
+            font-size: 1.2rem;
         }
 
         /* Hero Section */
         .hero {
-            background: linear-gradient(135deg, 
-                rgba(10, 10, 15, 0.9) 0%, 
-                rgba(0, 51, 102, 0.8) 50%, 
-                rgba(15, 15, 25, 0.9) 100%);
+            background: var(--dark-bg);
             color: white;
-            padding: 10rem 0 6rem;
+            padding: 4rem 0;
             text-align: center;
             position: relative;
-            overflow: hidden;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
         }
 
-        .hero::before {
+        .hero::after {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
             bottom: 0;
-            background: 
-                linear-gradient(45deg, transparent 30%, rgba(0, 255, 255, 0.05) 50%, transparent 70%),
-                linear-gradient(-45deg, transparent 30%, rgba(255, 0, 255, 0.05) 50%, transparent 70%);
-            animation: heroGlow 8s ease-in-out infinite;
-        }
-
-        @keyframes heroGlow {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 0.8; }
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--secondary);
+            opacity: 0.6;
         }
 
         .hero-content {
-            position: relative;
-            z-index: 2;
-            max-width: 900px;
+            max-width: 800px;
             margin: 0 auto;
-            padding: 0 2rem;
+            padding: 0 20px;
         }
 
         .hero h1 {
-            font-family: 'Orbitron', monospace;
-            font-size: 4rem;
+            font-family: 'Roboto Slab', serif;
+            font-size: 2.5rem;
             margin-bottom: 1rem;
-            font-weight: 900;
-            background: var(--gradient-neon);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: titleGlow 3s ease-in-out infinite;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        @keyframes titleGlow {
-            0%, 100% { filter: drop-shadow(0 0 20px rgba(0, 255, 255, 0.5)); }
-            50% { filter: drop-shadow(0 0 40px rgba(0, 255, 255, 0.8)); }
+            font-weight: 700;
+            letter-spacing: 1px;
         }
 
         .hero h2 {
-            font-size: 1.3rem;
-            margin-bottom: 3rem;
-            opacity: 0.9;
-            animation: fadeInUp 1s ease-out 0.5s both;
-            color: var(--text-secondary);
-            font-weight: 300;
-            letter-spacing: 1px;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            font-weight: 400;
+            opacity: 0.85;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .hero-info {
             display: flex;
             justify-content: center;
             gap: 4rem;
-            margin: 4rem 0;
-            animation: fadeInUp 1s ease-out 0.8s both;
+            margin: 2.5rem 0;
         }
 
         .hero-info-item {
             text-align: center;
-            padding: 1.5rem;
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(0, 255, 255, 0.2);
-            border-radius: 15px;
-            transition: all 0.3s ease;
-        }
-
-        .hero-info-item:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary-neon);
         }
 
         .hero-info-item i {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
             display: block;
+            color: var(--secondary);
         }
 
         /* Main Content */
         .main-content {
-            margin-right: auto;
-            margin-left: auto;
-            transition: margin-right 0.3s ease;
+            padding: 3rem 0;
         }
 
         section {
-            padding: 5rem 0;
-            max-width: 1000px;
+            padding: 3rem 0;
+            max-width: 900px;
             margin: 0 auto;
-            padding-left: 2rem;
-            padding-right: 2rem;
+            padding-left: 20px;
+            padding-right: 20px;
         }
 
         .section-title {
-            font-family: 'Orbitron', monospace;
-            font-size: 2.8rem;
+            font-family: 'Roboto Slab', serif;
+            font-size: 2rem;
             text-align: center;
-            margin-bottom: 4rem;
-            color: var(--primary-neon);
+            margin-bottom: 2.5rem;
+            color: var(--header-color);
             position: relative;
-            padding-bottom: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-weight: 700;
+            padding-bottom: 0.8rem;
+            letter-spacing: 0.5px;
         }
 
         .section-title::after {
@@ -337,101 +201,77 @@
             bottom: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 100px;
-            height: 3px;
-            background: var(--gradient-neon);
-            border-radius: 2px;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+            width: 50px;
+            height: 2px;
+            background: var(--secondary);
         }
 
-        /* Glass card styling */
-        .glass-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 3rem;
-            margin-bottom: 3rem;
-            box-shadow: 
-                0 8px 32px rgba(0, 0, 0, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .glass-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.1), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .glass-card:hover::before {
-            left: 100%;
-        }
-
-        .glass-card:hover {
-            border-color: rgba(0, 255, 255, 0.3);
-            transform: translateY(-5px);
-            box-shadow: 
-                0 20px 40px rgba(0, 0, 0, 0.4),
-                0 0 30px rgba(0, 255, 255, 0.2);
+        /* Card styling */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
 
         .content-text {
-            font-size: 1.1rem;
+            font-size: 1rem;
             margin-bottom: 1.5rem;
-            line-height: 1.8;
-            color: var(--text-secondary);
-            text-align: justify;
+            line-height: 1.7;
+            color: var(--text-primary);
         }
 
         .highlight {
-            font-weight: 700;
-            background: var(--gradient-neon);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            position: relative;
+            font-weight: 600;
+            color: var(--primary);
         }
 
         .subsection {
             font-weight: 700;
-            color: var(--primary-neon);
-            font-size: 1.1rem;
+            color: var(--primary);
+            font-size: 1rem;
             margin-right: 0.5rem;
-            font-family: 'Orbitron', monospace;
         }
 
         .award-text {
-            font-style: italic;
-            font-weight: 600;
-            color: #ffd700;
-            background: rgba(255, 215, 0, 0.1);
+            font-weight: 500;
+            color: #6b5900;
+            background: #fffbeb;
             padding: 8px 12px;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 3px;
+            border: 1px solid #f7e9c3;
             display: inline-block;
             margin: 0.2rem 0;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
         }
 
         .award-text::before {
-            content: '✨';
+            content: '✓';
             margin-right: 5px;
         }
 
-        .award-text:hover {
-            background: rgba(255, 215, 0, 0.2);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(255, 215, 0, 0.3);
+        /* Sponsorship section */
+        .sponsorship-card {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .sponsor-logo {
+            max-width: 180px;
+            margin: 0 auto 1.5rem;
+            display: block;
+        }
+
+        .sponsor-title {
+            color: var(--header-color);
+            font-family: 'Roboto Slab', serif;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
         }
 
         /* Grid layouts */
@@ -439,139 +279,48 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
-            margin-top: 3rem;
+            margin-top: 2rem;
         }
 
         .grid-item {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            padding: 2.5rem;
-            border-radius: 15px;
-            border: 1px solid rgba(0, 255, 255, 0.2);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .grid-item::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: var(--gradient-neon);
-            border-radius: 15px;
-            z-index: -1;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .grid-item:hover::before {
-            opacity: 0.3;
-        }
-
-        .grid-item:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 255, 255, 0.2);
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
         }
 
         .grid-item h3 {
-            color: var(--primary-neon);
+            color: var(--primary);
             margin-bottom: 1rem;
-            font-family: 'Orbitron', monospace;
             font-weight: 600;
-        }
-
-        .date {
-            font-size: 1.3rem;
-            color: var(--secondary-neon);
-            font-weight: 600;
-            font-family: 'Orbitron', monospace;
         }
 
         /* Speaker Biography Styles */
-
         .speaker-bio-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 2.5rem;
-            margin-bottom: 2.5rem;
-            box-shadow: 
-                0 8px 32px rgba(0, 0, 0, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
             display: flex;
             align-items: flex-start;
-            gap: 2rem;
-        }
-
-        .speaker-bio-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 0, 255, 0.1), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .speaker-bio-card:hover::before {
-            left: 100%;
-        }
-
-        .speaker-bio-card:hover {
-            border-color: rgba(255, 0, 255, 0.3);
-            transform: translateY(-5px);
-            box-shadow: 
-                0 20px 40px rgba(0, 0, 0, 0.4),
-                0 0 30px rgba(255, 0, 255, 0.2);
+            gap: 1.5rem;
         }
 
         .bio-avatar {
             flex-shrink: 0;
-            width: 200px;
-            height: 200px;
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
-            background: var(--gradient-neon);
-            padding: 3px;
-            position: relative;
+            border: 2px solid var(--border-color);
             overflow: hidden;
-            box-shadow: 
-                0 0 25px rgba(255, 0, 255, 0.4),
-                0 8px 32px rgba(0, 0, 0, 0.3);
-        }
-
-        .bio-avatar::before {
-            content: '';
-            position: absolute;
-            top: -3px;
-            left: -3px;
-            right: -3px;
-            bottom: -3px;
-            background: var(--gradient-neon);
-            border-radius: 50%;
-            z-index: -1;
-            animation: rotate 4s linear infinite;
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
         }
 
         .bio-avatar img {
             width: 100%;
             height: 100%;
-            border-radius: 50%;
             object-fit: cover;
             object-position: center;
-            transition: all 0.3s ease;
         }
 
         .bio-content {
@@ -579,248 +328,110 @@
         }
 
         .bio-header {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
         }
 
         .bio-name {
-            font-size: 1.6rem;
-            color: var(--primary-neon);
-            margin-bottom: 0.5rem;
-            font-family: 'Orbitron', monospace;
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-bottom: 0.3rem;
             font-weight: 700;
+            font-family: 'Roboto Slab', serif;
         }
 
         .bio-role {
             color: var(--text-secondary);
-            font-size: 1rem;
-            margin-bottom: 0.3rem;
-            font-weight: 500;
+            font-size: 0.95rem;
+            margin-bottom: 0.2rem;
+            font-weight: 400;
         }
 
         .bio-institution {
-            color: var(--secondary-neon);
+            color: var(--secondary);
             font-size: 0.9rem;
             font-weight: 600;
         }
 
         .bio-text {
-            font-size: 1rem;
-            line-height: 1.7;
+            font-size: 0.95rem;
+            line-height: 1.6;
             color: var(--text-secondary);
-            text-align: justify;
-        }
-
-        /* Program Committee Styles */
-        .committee-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
-        }
-
-        .committee-member {
-            background: rgba(0, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(0, 255, 255, 0.2);
-            border-radius: 15px;
-            padding: 1.5rem;
-            text-align: center;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .committee-member::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.1), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .committee-member:hover::before {
-            left: 100%;
-        }
-
-        .committee-member:hover {
-            border-color: var(--primary-neon);
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(0, 255, 255, 0.2);
-        }
-
-        .member-name {
-            display: block;
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--primary-neon);
-            margin-bottom: 0.5rem;
-            font-family: 'Orbitron', monospace;
-        }
-
-        .member-affiliation {
-            display: block;
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            opacity: 0.8;
         }
 
         /* Topic List Styles */
         .topic-list {
             display: flex;
             flex-direction: column;
-            gap: 1.8rem;
+            gap: 1rem;
         }
 
         .topic-item {
-            background: rgba(0, 255, 255, 0.03);
-            border: 1px solid rgba(0, 255, 255, 0.15);
-            border-radius: 15px;
-            padding: 1.8rem;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .topic-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.08), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .topic-item:hover::before {
-            left: 100%;
-        }
-
-        .topic-item:hover {
-            border-color: rgba(0, 255, 255, 0.3);
-            transform: translateX(5px);
-            box-shadow: 0 8px 25px rgba(0, 255, 255, 0.15);
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 1.4rem;
         }
 
         .topic-title {
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             font-weight: 600;
-            color: var(--primary-neon);
-            margin-bottom: 0.8rem;
+            color: var(--primary);
+            margin-bottom: 0.7rem;
             line-height: 1.4;
-            font-family: 'Exo 2', sans-serif;
         }
 
         .topic-description {
             font-size: 0.95rem;
             color: var(--text-secondary);
             font-style: italic;
-            opacity: 0.9;
             line-height: 1.5;
             margin: 0;
         }
 
         /* Link styles */
         .content-text a {
-            color: var(--primary-neon);
+            color: var(--link-color);
             text-decoration: none;
             border-bottom: 1px solid transparent;
-            transition: all 0.3s ease;
+            transition: border-color 0.2s;
         }
 
         .content-text a:hover {
-            border-bottom-color: var(--primary-neon);
-            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+            border-bottom-color: var(--link-color);
         }
 
-        /* Clickable Card Styles */
+        /* Clickable Cards */
         .clickable-card {
             cursor: pointer;
-            user-select: none;
             position: relative;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-
+        
         .clickable-card:hover {
-            border-color: rgba(0, 255, 255, 0.4) !important;
-            transform: translateY(-8px) !important;
-            box-shadow: 
-                0 25px 50px rgba(0, 0, 0, 0.4),
-                0 0 40px rgba(0, 255, 255, 0.3) !important;
-        }
-
-        .clickable-card::after {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: var(--gradient-neon);
-            border-radius: 22px;
-            z-index: -1;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .clickable-card:hover::after {
-            opacity: 0.2;
+            transform: translateY(-2px);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
         }
 
         .click-indicator {
             position: absolute;
-            top: 15px;
-            right: 20px;
-            background: rgba(0, 255, 255, 0.1);
-            border: 1px solid rgba(0, 255, 255, 0.3);
-            border-radius: 20px;
-            padding: 8px 15px;
-            font-size: 0.8rem;
-            color: var(--primary-neon);
-            opacity: 0;
-            transform: translateY(-10px);
-            transition: all 0.3s ease;
-            font-family: 'Orbitron', monospace;
-            font-weight: 500;
-            backdrop-filter: blur(10px);
-        }
-
-        .clickable-card:hover .click-indicator {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .click-indicator span {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        /* Touch device optimizations */
-        @media (hover: none) and (pointer: coarse) {
-            .click-indicator {
-                opacity: 1;
-                position: static;
-                margin-top: 1rem;
-                text-align: center;
-                transform: none;
-            }
-            
-            .clickable-card:active {
-                transform: translateY(-5px) scale(0.98) !important;
-            }
+            top: 12px;
+            right: 12px;
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 3px;
+            padding: 4px 8px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            font-weight: 400;
         }
 
         /* Schedule table */
         .schedule-table {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
+            background: var(--card-bg);
+            border-radius: 4px;
             overflow: hidden;
-            border: 1px solid rgba(0, 255, 255, 0.2);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
 
         .schedule-table table {
@@ -829,155 +440,106 @@
         }
 
         .schedule-table th {
-            background: linear-gradient(135deg, rgba(0, 255, 255, 0.2), rgba(255, 0, 255, 0.2));
-            color: var(--text-primary);
-            padding: 1.5rem;
+            background: #f8f9fa;
+            color: var(--primary);
+            padding: 1rem;
             text-align: left;
-            font-family: 'Orbitron', monospace;
             font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            font-size: 0.95rem;
         }
 
         .schedule-table td {
-            padding: 1.5rem;
-            border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+            padding: 1rem;
+            border-bottom: 1px solid #e9ecef;
             color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .schedule-table tr:last-child td {
+            border-bottom: none;
         }
 
         .schedule-table tr:hover {
-            background: rgba(0, 255, 255, 0.05);
+            background: #f8f9fa;
         }
 
         .schedule-table .break-row {
-            background: rgba(255, 0, 255, 0.05);
+            background: #f8f9fa;
         }
 
         .schedule-table .break-row:hover {
-            background: rgba(255, 0, 255, 0.1);
+            background: #f0f0f0;
         }
 
         .time-slot {
             font-weight: 600;
-            color: var(--primary-neon);
+            color: var(--primary);
             white-space: nowrap;
-            font-family: 'Orbitron', monospace;
+            font-size: 0.9rem;
         }
 
         /* Button styles */
         .btn {
             display: inline-block;
-            padding: 1rem 2.5rem;
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            color: var(--primary-neon);
+            padding: 0.7rem 1.5rem;
+            background: var(--secondary);
+            color: white;
             text-decoration: none;
-            border-radius: 50px;
-            border: 2px solid var(--primary-neon);
-            transition: all 0.3s ease;
+            border-radius: 3px;
+            border: none;
+            transition: background-color 0.2s;
             font-weight: 600;
-            font-family: 'Orbitron', monospace;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: var(--gradient-neon);
-            transition: left 0.3s ease;
-            z-index: -1;
-        }
-
-        .btn:hover::before {
-            left: 0;
+            font-size: 0.9rem;
         }
 
         .btn:hover {
-            color: var(--dark-bg);
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(0, 255, 255, 0.4);
+            background: var(--accent);
         }
 
         /* Footer */
         footer {
             background: var(--dark-bg);
-            border-top: 1px solid rgba(0, 255, 255, 0.2);
-            color: var(--text-secondary);
+            color: rgba(255, 255, 255, 0.8);
             text-align: center;
-            padding: 4rem 0;
-            margin-top: 5rem;
-            position: relative;
+            padding: 3rem 0;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .footer-content {
-            max-width: 1000px;
+            max-width: 900px;
             margin: 0 auto;
-            padding: 0 2rem;
+            padding: 0 20px;
         }
 
         .social-links {
-            margin-top: 2rem;
+            margin-top: 1.5rem;
             display: flex;
             justify-content: center;
-            gap: 2rem;
+            gap: 1.5rem;
         }
 
         .social-links a {
-            color: var(--primary-neon);
-            font-size: 2rem;
-            transition: all 0.3s ease;
-            padding: 1rem;
-            border: 1px solid rgba(0, 255, 255, 0.3);
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.1rem;
+            transition: color 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
         .social-links a:hover {
-            transform: translateY(-5px) scale(1.1);
-            box-shadow: 0 10px 25px rgba(0, 255, 255, 0.4);
-        }
-
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .fade-in {
-            animation: fadeInUp 0.8s ease-out;
+            color: var(--secondary);
         }
 
         /* Responsive */
         @media (max-width: 1024px) {
-            .main-content {
-                margin-right: 0;
-            }
-            
             .right-nav {
                 transform: translateX(100%) translateY(-50%);
                 top: 50%;
                 right: 0;
-                height: 100vh;
-                border-radius: 0;
-                padding: 3rem 2rem;
-                min-width: 280px;
+                height: auto;
+                border-radius: 5px 0 0 5px;
                 transition: transform 0.3s ease;
             }
             
@@ -988,45 +550,15 @@
             .menu-toggle {
                 display: block;
             }
-
-            .speaker-bio-card {
-                flex-direction: column;
-                text-align: center;
-                padding: 2rem;
-            }
-
-            .bio-avatar {
-                align-self: center;
-                width: 100px;
-                height: 100px;
-            }
-
-            .committee-grid {
-                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-                gap: 1.2rem;
-            }
-
-            .topic-item {
-                padding: 1.6rem;
-            }
-
-            .topic-title {
-                font-size: 1.05rem;
-            }
-
-            .click-indicator {
-                font-size: 0.75rem;
-                padding: 6px 12px;
-            }
         }
         
         @media (max-width: 768px) {
             .hero h1 {
-                font-size: 2.5rem;
+                font-size: 2rem;
             }
             
             .hero h2 {
-                font-size: 1.1rem;
+                font-size: 1rem;
             }
             
             .hero-info {
@@ -1039,123 +571,74 @@
             }
             
             .section-title {
-                font-size: 2rem;
+                font-size: 1.8rem;
             }
 
             .speaker-bio-card {
-                padding: 2rem;
                 flex-direction: column;
                 text-align: center;
+                padding: 1.5rem;
             }
 
             .bio-avatar {
+                align-self: center;
                 width: 100px;
                 height: 100px;
-            }
-
-            .bio-name {
-                font-size: 1.4rem;
-            }
-
-            .bio-text {
-                font-size: 0.95rem;
-            }
-
-            .committee-grid {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-
-            .committee-member {
-                padding: 1.2rem;
-            }
-
-            .member-name {
-                font-size: 1rem;
-            }
-
-            .topic-item {
-                padding: 1.4rem;
-            }
-
-            .topic-title {
-                font-size: 1rem;
-                margin-bottom: 0.6rem;
-            }
-
-            .topic-description {
-                font-size: 0.9rem;
-            }
-
-            .click-indicator {
-                position: relative;
-                top: auto;
-                right: auto;
-                margin-top: 1rem;
-                opacity: 1;
-                transform: none;
-                text-align: center;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Floating Particles -->
-    <div class="particles" id="particles"></div>
-
     <!-- Right Side Navigation -->
     <nav class="right-nav" id="rightNav">
         <div class="nav-header">Navigation</div>
-        <ul class="nav-links">
-            <li><a href="#about" class="nav-link">Workshop Summary</a></li>
-            <li><a href="#speakers" class="nav-link">Keynote Speakers</a></li>
-            <li><a href="#schedule" class="nav-link">Schedule</a></li>
-            <li><a href="#organizers" class="nav-link">Organizers</a></li>
-            <li><a href="#submission" class="nav-link">Call for Papers</a></li>
-            <li><a href="#scope" class="nav-link">Scope</a></li>
-            <!-- <li><a href="#committee" class="nav-link">Program Committee</a></li> -->
-            <li><a href="#contact" class="nav-link">Contact</a></li>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#about">Summary</a></li>
+            <li><a href="#highlights">Highlights</a></li>
+            <li><a href="#speakers">Speakers</a></li>
+            <li><a href="#schedule">Schedule</a></li>
+            <li><a href="#organizers">Organizers</a></li>
+            <li><a href="#submission">Call for Papers</a></li>
+            <li><a href="#scope">Scope</a></li>
+            <li><a href="#sponsorship">Sponsorship</a></li>
+            <li><a href="#contact">Contact</a></li>
         </ul>
     </nav>
-
+    
     <!-- Mobile Menu Toggle -->
-    <button class="menu-toggle" id="menuToggle">
-        <span></span>
-        <span></span>
-        <span></span>
-    </button>
+    <button class="menu-toggle" id="menuToggle">☰</button>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container hero-content">
+            <h1>MOCOCO Workshop</h1>
+            <h2>MOdeling and COmputation CO-Design for Efficient Machine Learning</h2>
+            <div class="hero-info">
+                <div class="hero-info-item">
+                    <i>📅</i>
+                    <strong>December, 2025</strong>
+                </div>
+                <div class="hero-info-item">
+                    <i>📍</i>
+                    <strong>NeurIPS 2025</strong>
+                </div>
+                <div class="hero-info-item">
+                    <i>🌐</i>
+                    <strong>International Workshop</strong>
+                </div>
+            </div>
+            <div style="margin-top: 2rem;">
+                <a href="#submission" class="btn">Submit Your Paper</a>
+            </div>
+        </div>
+    </section>
 
     <!-- Main Content -->
     <div class="main-content">
-        <!-- Hero Section -->
-        <section class="hero">
-            <div class="hero-content">
-                <h1>MOCOCO</h1>
-                <h2>MOdeling and COmputation CO-Design for Efficient Machine Learning</h2>
-                <div class="hero-info">
-                    <div class="hero-info-item">
-                        <i>📅</i>
-                        <strong>December, 2025</strong>
-                    </div>
-                    <div class="hero-info-item">
-                        <i>📍</i>
-                        <strong>NeurIPS 2025</strong>
-                    </div>
-                    <div class="hero-info-item">
-                        <i>🌐</i>
-                        <strong>International Workshop</strong>
-                    </div>
-                </div>
-                <div style="margin-top: 3rem;">
-                    <a href="#submission" class="btn">Submit Your Paper</a>
-                </div>
-            </div>
-        </section>
-
         <!-- About Section -->
-        <section id="about" class="fade-in">
+        <section id="about">
             <h2 class="section-title">Workshop Summary</h2>
-            <div class="glass-card">
+            <div class="card">
                 <p class="content-text">
                     Current machine learning (ML) increasingly depends on scaling up data, model size, and compute resources to reach state-of-the-art performance. While this strategy has driven remarkable progress, it also raises critical challenges: longer runtimes, higher memory and energy demands, inefficient hardware utilization, and limited deployment scalability. The current <span class="highlight">scaling-centric</span> approach often neglects the cumulative costs across the computational stack, threatening ML's sustainability and accessibility.
                 </p>
@@ -1163,7 +646,7 @@
                     <span class="highlight">MOCOCO</span> (<span class="highlight">MO</span>deling and <span class="highlight">CO</span>mputation <span class="highlight">CO</span>-Design for Efficient Machine Learning) offers a venue to rethink ML through the joint design of modeling and computation. It promotes efficiency-driven co-design across model architecture, learning algorithms, software, and hardware. From general to domain-specific ML in science and healthcare, MOCOCO welcomes work that aligns efficiency objectives across all layers of the ML pipeline.
                 </p>
                 <p class="content-text">
-                    <span class="subsection">Activities.</span> The workshop will include keynotes, a panel discussion, oral presentations, and poster sessions. We invite high-quality original papers of up to 4 pages. All accepted papers will be presented as posters, with a subset selected for oral presentations. Two outstanding papers and two outstanding student papers will be recognized by the program committee. <span class="award-text">Our confirmed sponsor, Lambda, will award $1,500 in GPU credits to each outstanding paper team</span>
+                    <span class="subsection">Activities.</span> The workshop will include keynotes, a panel discussion, oral presentations, and poster sessions. We invite high-quality original papers of up to 4 pages. All accepted papers will be presented as posters, with a subset selected for oral presentations.
                 </p>
                 <p class="content-text">
                     <span class="subsection">Attendance Estimate.</span> We expect between 80 and 100 paper submissions and around 200 attendees.
@@ -1171,8 +654,40 @@
             </div>
         </section>
 
+        <!-- Workshop Highlights -->
+        <section id="highlights">
+            <h2 class="section-title">Workshop Highlights</h2>
+            <div class="card">
+                <p class="content-text">
+                    We highlight the contributions of this workshop in crystallizing problems and emerging scientific paradigms towards efficient ML:
+                </p>
+                <ul style="list-style-type: none; padding-left: 0; margin-bottom: 1.5rem;">
+                    <li style="margin-bottom: 1rem; padding-left: 1.5rem; position: relative;">
+                        <span style="position: absolute; left: 0; color: var(--secondary);">▪</span>
+                        <span class="highlight">Bridging Modeling and Computation for Efficiency:</span> MOCOCO pioneers a co-design approach that unifies modeling, algorithm design, and system-level innovations. By moving beyond isolated solutions, it fosters integrated strategies that maximize ML efficiency across the stack, from architecture to hardware, marking a significant shift in how integrative efficient ML systems are developed and deployed.
+                    </li>
+                    <li style="margin-bottom: 1rem; padding-left: 1.5rem; position: relative;">
+                        <span style="position: absolute; left: 0; color: var(--secondary);">▪</span>
+                        <span class="highlight">Industry-Academia Collaboration at the Core:</span> The workshop is intentionally structured to catalyze partnerships between academia and industry. With organizers and speakers from top research institutions and leading technology companies like Meta and Lambda, MOCOCO exemplifies a practical and research-driven collaboration framework aimed at real-world impact.
+                    </li>
+                    <li style="margin-bottom: 1rem; padding-left: 1.5rem; position: relative;">
+                        <span style="position: absolute; left: 0; color: var(--secondary);">▪</span>
+                        <span class="highlight">Diverse and Intergenerational Organizing Team:</span> MOCOCO is distinct in its balanced involvement of both junior and senior researchers in the organization and speaker lineup. This design promotes mentorship, fresh perspectives, and continuity in advancing the field of efficient ML, encouraging broad community engagement.
+                    </li>
+                    <li style="margin-bottom: 1rem; padding-left: 1.5rem; position: relative;">
+                        <span style="position: absolute; left: 0; color: var(--secondary);">▪</span>
+                        <span class="highlight">Strong Industrial Sponsorship by Lambda:</span> Backed by Lambda as a secured sponsor, MOCOCO not only ensures financial support for outstanding work but also includes industry demonstrations. This backing reinforces the workshop's relevance to commercial scalability and provides tangible incentives such as GPU credit awards to recognize impactful research.
+                    </li>
+                    <li style="padding-left: 1.5rem; position: relative;">
+                        <span style="position: absolute; left: 0; color: var(--secondary);">▪</span>
+                        <span class="highlight">Interdisciplinary Integration with NIH BRAIN Initiative Expert:</span> Highlighting the intersection of ML and biomedical informatics, a dedicated session by Prof. Jim Zheng will present compute and data challenges from the NIH BRAIN Initiative. This elevates MOCOCO's scope to include critical applications in health and science, broadening its impact and attracting interdisciplinary participation.
+                    </li>
+                </ul>
+            </div>
+        </section>
+
         <!-- Speakers Section -->
-        <section id="speakers" class="fade-in">
+        <section id="speakers">
             <h2 class="section-title">Keynote Speakers</h2>
             
             <div class="speaker-bio-card clickable-card" data-url="https://ai.meta.com/people/301718759371133/leon-bottou/">
@@ -1190,7 +705,7 @@
                     </p>
                 </div>
                 <div class="click-indicator">
-                    <span>🔗 Click to visit profile</span>
+                    <span>🔗 Visit profile</span>
                 </div>
             </div>
 
@@ -1209,7 +724,7 @@
                     </p>
                 </div>
                 <div class="click-indicator">
-                    <span>🔗 Click to visit profile</span>
+                    <span>🔗 Visit profile</span>
                 </div>
             </div>
 
@@ -1228,7 +743,7 @@
                     </p>
                 </div>
                 <div class="click-indicator">
-                    <span>🔗 Click to visit profile</span>
+                    <span>🔗 Visit profile</span>
                 </div>
             </div>
 
@@ -1247,7 +762,7 @@
                     </p>
                 </div>
                 <div class="click-indicator">
-                    <span>🔗 Click to visit profile</span>
+                    <span>🔗 Visit profile</span>
                 </div>
             </div>
 
@@ -1266,7 +781,7 @@
                     </p>
                 </div>
                 <div class="click-indicator">
-                    <span>🔗 Click to visit profile</span>
+                    <span>🔗 Visit profile</span>
                 </div>
             </div>
 
@@ -1285,13 +800,13 @@
                     </p>
                 </div>
                 <div class="click-indicator">
-                    <span>🔗 Click to visit profile</span>
+                    <span>🔗 Visit profile</span>
                 </div>
             </div>
         </section>
 
         <!-- Schedule Section -->
-        <section id="schedule" class="fade-in">
+        <section id="schedule">
             <h2 class="section-title">Workshop Schedule</h2>
             <div class="schedule-table">
                 <table>
@@ -1316,11 +831,11 @@
                         <tr>
                             <td class="time-slot">9:30 - 10:00</td>
                             <td><strong>Invited Talk</strong></td>
-                            <td>TBD</td>
+                            <td>Zhihao Jia</td>
                         </tr>
                         <tr class="break-row">
                             <td class="time-slot">10:00 - 10:15</td>
-                            <td><strong>☕ Coffee Break</strong></td>
+                            <td><strong>Coffee Break</strong></td>
                             <td>Networking Opportunity</td>
                         </tr>
                         <tr>
@@ -1335,18 +850,18 @@
                         </tr>
                         <tr class="break-row">
                             <td class="time-slot">11:45 - 13:00</td>
-                            <td><strong>🍽️ Lunch Break</strong></td>
+                            <td><strong>Lunch Break</strong></td>
                             <td>Networking Lunch</td>
                         </tr>
                         <tr>
                             <td class="time-slot">13:00 - 13:30</td>
                             <td><strong>Invited Talk</strong></td>
-                            <td>TBD</td>
+                            <td>Ying Nian Wu</td>
                         </tr>
                         <tr>
                             <td class="time-slot">13:30 - 14:00</td>
                             <td><strong>Invited Talk</strong></td>
-                            <td>TBD</td>
+                            <td>W.Jin Zheng</td>
                         </tr>
                         <tr>
                             <td class="time-slot">14:00 - 15:00</td>
@@ -1355,7 +870,7 @@
                         </tr>
                         <tr class="break-row">
                             <td class="time-slot">15:00 - 15:15</td>
-                            <td><strong>☕ Coffee Break</strong></td>
+                            <td><strong>Coffee Break</strong></td>
                             <td>Networking Opportunity</td>
                         </tr>
                         <tr>
@@ -1384,7 +899,7 @@
         </section>
 
         <!-- Organizers Section -->
-        <section id="organizers" class="fade-in">
+        <section id="organizers">
             <h2 class="section-title">Workshop Organizers</h2>
             
             <div class="speaker-bio-card clickable-card" data-url="https://scholar.google.com/citations?hl=en&user=7tDlVAsAAAAJ&view_op=list_works&sortby=pubdate">
@@ -1402,7 +917,7 @@
                     </p>
                 </div>
                 <div class="click-indicator">
-                    <span>🔗 Click to visit profile</span>
+                    <span>🔗 Visit profile</span>
                 </div>
             </div>
 
@@ -1418,13 +933,13 @@
                     </div>
                     <p class="bio-text">
                         Jianwen Xie is a Research Scientist at Lambda, Inc, with a focus on generative modeling, vision language models, AI for Science, and embodied AI.
-He received his Ph.D. from the University of California, Los Angeles (UCLA). Dr. Xie serves as a Senior~Area~Chair for NeurIPS, and Area Chair for ICML, ICLR, CVPR, ECCV and WACV. He is currently an Associate Editor of IEEE Transactions on Neural Networks and Learning Systems (TNNLS), IEEE Transactions on Image Processing (TIP), Pattern Recognition (PR), Computer Vision and Image Understanding (CVIU), and
+He received his Ph.D. from the University of California, Los Angeles (UCLA). Dr. Xie serves as a Senior Area Chair for NeurIPS, and Area Chair for ICML, ICLR, CVPR, ECCV and WACV. He is currently an Associate Editor of IEEE Transactions on Neural Networks and Learning Systems (TNNLS), IEEE Transactions on Image Processing (TIP), Pattern Recognition (PR), Computer Vision and Image Understanding (CVIU), and
 Journal of Artificial Intelligence Research (JAIR). He co-organized
 tutorials at CVPR, ICCV, ECCV, and IJCAI.
                     </p>
                 </div>
                 <div class="click-indicator">
-                    <span>🔗 Click to visit profile</span>
+                    <span>🔗 Visit profile</span>
                 </div>
             </div>
 
@@ -1443,7 +958,7 @@ tutorials at CVPR, ICCV, ECCV, and IJCAI.
                     </p>
                 </div>
                 <div class="click-indicator">
-                    <span>🔗 Click to visit profile</span>
+                    <span>🔗 Visit profile</span>
                 </div>
             </div>
 
@@ -1459,12 +974,12 @@ tutorials at CVPR, ICCV, ECCV, and IJCAI.
                     </div>
                     <p class="bio-text">
                         Anshumali Shrivastava is a professor in the computer science department at Rice University. His broad research interests include probabilistic algorithms for resource-frugal deep learning. In 2018, Science news named him one of the Top-10 scientists under 40 to watch. He is a recipient of the National Science Foundation CAREER Award, a Young Investigator Award from the Air Force Office of Scientific Research, a machine learning research award from Amazon, and a Data Science Research Award from Adobe. He has won numerous
-paper awards, including Best Paper Award at <b>NIPS 2014</b>, MLSys 2022, and Most Reproducible Paper Award at SIGMOD 2019. His work on efficient
+paper awards, including Best Paper Award at NIPS 2014, MLSys 2022, and Most Reproducible Paper Award at SIGMOD 2019. His work on efficient
 machine learning technologies on CPUs has been covered by popular press including Wall Street Journal, New York Times, TechCrunch, NDTV, Engadget, Ars technica, etc.
                     </p>
                 </div>
                 <div class="click-indicator">
-                    <span>🔗 Click to visit profile</span>
+                    <span>🔗 Visit profile</span>
                 </div>
             </div>
 
@@ -1483,7 +998,7 @@ machine learning technologies on CPUs has been covered by popular press includin
                     </p>
                 </div>
                 <div class="click-indicator">
-                    <span>🔗 Click to visit profile</span>
+                    <span>🔗 Visit profile</span>
                 </div>
             </div>
 
@@ -1502,7 +1017,7 @@ machine learning technologies on CPUs has been covered by popular press includin
                     </p>
                 </div>
                 <div class="click-indicator">
-                    <span>📧 Click to email</span>
+                    <span>📧 Email</span>
                 </div>
             </div>
 
@@ -1521,18 +1036,18 @@ machine learning technologies on CPUs has been covered by popular press includin
                     </p>
                 </div>
                 <div class="click-indicator">
-                    <span>📧 Click to email</span>
+                    <span>📧 Email</span>
                 </div>
             </div>
         </section>
 
         <!-- Submission Section -->
-        <section id="submission" class="fade-in">
+        <section id="submission">
             <h2 class="section-title">Call for Papers</h2>
-            <div class="glass-card">
-                <h3 style="color: var(--primary-neon); margin-bottom: 1rem; font-family: 'Orbitron', monospace;">Submission Guidelines</h3>
+            <div class="card">
+                <h3 style="color: var(--primary); margin-bottom: 1rem; font-weight: 600;">Submission Guidelines</h3>
                 <p class="content-text">
-                    We invite researchers and practitioners to submit their original work on modeling and computation co-design for efficient machine learning. Please refer to the <a href="#scope" style="color: var(--primary-neon); text-decoration: none;">Workshop Scope</a> section for detailed topics of interest.
+                    We invite researchers and practitioners to submit their original work on modeling and computation co-design for efficient machine learning. Please refer to the <a href="#scope">Workshop Scope</a> section for detailed topics of interest.
                 </p>
                 <p class="content-text">
                     <span class="subsection">Paper Format:</span> Papers should be formatted according to the NeurIPS 2025 style guidelines and should not exceed 4 pages (excluding references and appendices).
@@ -1541,20 +1056,20 @@ machine learning technologies on CPUs has been covered by popular press includin
                     <span class="subsection">Submission Deadline:</span> September 30, 2025, Anywhere on Earth (AoE)
                 </p>
                 <p class="content-text">
-                    <span class="subsection">Awards:</span> Two outstanding papers and two outstanding student papers will be recognized by the program committee. Our confirmed sponsor, Lambda, will award $1,500 in GPU credits to each outstanding paper team. To promote diversity and inclusion, we have secured sponsorship from Lambda to offer support, including GPU cloud credits for outstanding papers.
+                    <span class="subsection">Awards:</span> Two outstanding papers and two outstanding student papers will be recognized by the program committee.
                 </p>
-                <div style="text-align: center; margin-top: 3rem;">
+                <div style="text-align: center; margin-top: 2rem;">
                     <a href="#" class="btn">Submit Your Paper</a>
                 </div>
             </div>
         </section>
 
         <!-- Scope Section -->
-        <section id="scope" class="fade-in">
-            <h2 class="section-title">Workshop Scope</h2>
-            <div class="glass-card">
-                <h3 style="color: var(--primary-neon); margin-bottom: 2rem; font-family: 'Orbitron', monospace; font-size: 1.3rem;">Paper Topics</h3>
-                <p class="content-text" style="margin-bottom: 2rem;">
+        <section id="scope">
+            <h2 class="section-title">Scope & Diversity</h2>
+            <div class="card">
+                <h3 style="color: var(--primary); margin-bottom: 1.5rem; font-weight: 600;">Paper Topics</h3>
+                <p class="content-text" style="margin-bottom: 1.5rem;">
                     We welcome papers with topics as follows:
                 </p>
                 
@@ -1594,53 +1109,60 @@ machine learning technologies on CPUs has been covered by popular press includin
                         <p class="topic-description">(e.g., accelerated material design, gene pathway discovery)</p>
                     </div>
                 </div>
+                
+                <h3 style="color: var(--primary); margin: 2.5rem 0 1.5rem; font-weight: 600; border-top: 1px solid var(--border-color); padding-top: 2rem;">Promoting Diversity</h3>
+                
+                <p class="content-text">
+                    MOCOCO is committed to fostering a diverse and inclusive research community. Our workshop encourages participation from individuals of varied backgrounds, disciplines, and career stages by prioritizing equitable access and representation. To reduce financial barriers, <span class="highlight">we have secured sponsorship from Lambda to offer support</span>, including GPU cloud credits for outstanding papers.
+                </p>
+                <p class="content-text">
+                    Our organizing committee and invited speakers reflect a range of ethnicities, genders, geographic regions, and affiliations across academia and industry. We are also reaching out to researchers from minority-serving institutions and early-career scholars to broaden engagement and foster a welcoming environment for all.
+                </p>
+            </div>
+        </section>
+
+        <!-- Sponsorship Section -->
+        <section id="sponsorship">
+            <h2 class="section-title">Strong Industrial Sponsorship by Lambda</h2>
+            <div class="sponsorship-card">
+                <img src="images/lambda_logo.png" alt="Lambda Logo" class="sponsor-logo">
+                <p class="content-text">
+                    Backed by Lambda as a secured sponsor, MOCOCO not only ensures financial support for outstanding work but also includes industry demonstrations. This backing reinforces the workshop's relevance to commercial scalability and provides tangible incentives such as GPU credit awards to recognize impactful research.
+                </p>
+                <p class="content-text">
+                    <span class="award-text">Lambda will award $1,500 in GPU credits to each outstanding paper team</span>
+                </p>
             </div>
         </section>
 
         <!-- Contact Section -->
-        <section id="contact" class="fade-in">
+        <section id="contact">
             <h2 class="section-title">Contact</h2>
-            <div class="glass-card" style="text-align: center;">
-                <p style="font-size: 1.2rem; margin-bottom: 2rem; color: var(--text-secondary);">
+            <div class="card" style="text-align: center;">
+                <p style="font-size: 1.1rem; margin-bottom: 1.5rem; color: var(--text-secondary);">
                     For any questions or inquiries about the workshop, please contact the organizers at:
                 </p>
-                <p style="font-size: 1.5rem; color: var(--primary-neon); font-weight: 600; font-family: 'Orbitron', monospace;">
+                <p style="font-size: 1.3rem; color: var(--primary); font-weight: 600;">
                     mococo@gmail.com
                 </p>
             </div>
         </section>
-
-        <!-- Footer -->
-        <footer>
-            <div class="footer-content">
-                <p>© 2025 MOCOCO Workshop. All rights reserved.</p>
-                <div class="social-links">
-                    <a href="#">📧</a>
-                    <a href="#">🐦</a>
-                    <a href="#">💼</a>
-                    <a href="#">📘</a>
-                </div>
-            </div>
-        </footer>
     </div>
 
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p>© 2025 MOCOCO Workshop. All rights reserved.</p>
+            <div class="social-links">
+                <a href="#">📧</a>
+                <a href="#">🐦</a>
+                <a href="#">💼</a>
+                <a href="#">📘</a>
+            </div>
+        </div>
+    </footer>
+
     <script>
-        // Create floating particles
-        function createParticles() {
-            const particlesContainer = document.getElementById('particles');
-            const particleCount = 25;
-
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.top = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 6 + 's';
-                particle.style.animationDuration = (3 + Math.random() * 6) + 's';
-                particlesContainer.appendChild(particle);
-            }
-        }
-
         // Mobile menu toggle
         const menuToggle = document.getElementById('menuToggle');
         const rightNav = document.getElementById('rightNav');
@@ -1650,7 +1172,7 @@ machine learning technologies on CPUs has been covered by popular press includin
         });
 
         // Smooth scrolling for navigation links
-        document.querySelectorAll('.nav-link').forEach(anchor => {
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
@@ -1666,7 +1188,7 @@ machine learning technologies on CPUs has been covered by popular press includin
 
         // Active link highlighting
         const sections = document.querySelectorAll('section[id]');
-        const navLinks = document.querySelectorAll('.nav-link');
+        const navLinks = document.querySelectorAll('.nav-links a');
 
         function updateActiveLink() {
             let current = '';
@@ -1685,44 +1207,18 @@ machine learning technologies on CPUs has been covered by popular press includin
             });
         }
 
-        // Scroll animations
-        const observer = new IntersectionObserver(function(entries) {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('fade-in');
-                }
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('section').forEach(section => {
-            if (!section.classList.contains('hero')) {
-                observer.observe(section);
-            }
-        });
-
         window.addEventListener('scroll', updateActiveLink);
         window.addEventListener('load', function() {
-            createParticles();
             updateActiveLink();
-        });
-
-        // Add glitch effect to title on hover
-        const heroTitle = document.querySelector('.hero h1');
-        heroTitle.addEventListener('mouseenter', function() {
-            this.style.animation = 'none';
-            setTimeout(() => {
-                this.style.animation = 'titleGlow 3s ease-in-out infinite';
-            }, 100);
         });
 
         // Clickable cards functionality
         document.querySelectorAll('.clickable-card').forEach(card => {
             card.addEventListener('click', function(e) {
-                e.preventDefault(); // Prevent any default behavior
+                e.preventDefault();
                 const url = this.getAttribute('data-url');
                 if (url) {
                     if (url.startsWith('mailto:')) {
-                        // Create a temporary anchor for mailto
                         const tempLink = document.createElement('a');
                         tempLink.href = url;
                         tempLink.style.display = 'none';
@@ -1730,23 +1226,9 @@ machine learning technologies on CPUs has been covered by popular press includin
                         tempLink.click();
                         document.body.removeChild(tempLink);
                     } else {
-                        // Handle regular URLs
                         window.open(url, '_blank');
                     }
                 }
-            });
-
-            // Add visual feedback on click
-            card.addEventListener('mousedown', function() {
-                this.style.transform = 'translateY(-5px) scale(0.98)';
-            });
-
-            card.addEventListener('mouseup', function() {
-                this.style.transform = 'translateY(-8px) scale(1)';
-            });
-
-            card.addEventListener('mouseleave', function() {
-                this.style.transform = '';
             });
         });
     </script>
