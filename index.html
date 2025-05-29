@@ -1389,7 +1389,7 @@
         <section id="organizers" class="fade-in">
             <h2 class="section-title">Workshop Organizers</h2>
             
-            <div class="speaker-bio-card clickable-card" data-url="https://www.stevens.edu/profile/zxu79">
+            <div class="speaker-bio-card clickable-card" data-url="https://scholar.google.com/citations?hl=en&user=7tDlVAsAAAAJ&view_op=list_works&sortby=pubdate">
                 <div class="bio-avatar">
                     <img src="images/zhaozhuo.jpg" alt="Zhaozhuo Xu">
                 </div>
@@ -1495,11 +1495,11 @@
                         <p class="bio-institution">Lambda, Inc.</p>
                     </div>
                     <p class="bio-text">
-                        Eve Callicoat is Senior Staff Engineer at Lambda, Inc. She has been programming and learning about computers for over 30 years, spent a decade at Rackspace working on the birth of Openstack, and now she is helping to deliver AI to users at Lambda.
+                        Eve Callicoat is Senior Staff Engineer at Lambda, Inc. She has been programming and learning about computers for over 30 years, spent a decade at Rackspace working on the birth of Openstack, and now she is helping to deliver AI to users at Lambda. Her extensive experience in software engineering and distributed systems makes her a valuable contributor to the development of efficient AI infrastructure and solutions.
                     </p>
                 </div>
                 <div class="click-indicator">
-                    <span>🔗 Click to contact</span>
+                    <span>📧 Click to email</span>
                 </div>
             </div>
         </section>
@@ -1695,10 +1695,22 @@
 
         // Clickable cards functionality
         document.querySelectorAll('.clickable-card').forEach(card => {
-            card.addEventListener('click', function() {
+            card.addEventListener('click', function(e) {
+                e.preventDefault(); // Prevent any default behavior
                 const url = this.getAttribute('data-url');
                 if (url) {
-                    window.open(url, '_blank');
+                    if (url.startsWith('mailto:')) {
+                        // Create a temporary anchor for mailto
+                        const tempLink = document.createElement('a');
+                        tempLink.href = url;
+                        tempLink.style.display = 'none';
+                        document.body.appendChild(tempLink);
+                        tempLink.click();
+                        document.body.removeChild(tempLink);
+                    } else {
+                        // Handle regular URLs
+                        window.open(url, '_blank');
+                    }
                 }
             });
 
